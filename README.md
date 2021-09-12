@@ -44,47 +44,82 @@ Instructions are given for each analyzer.
 
 ## Instructions for BMC
 
-To apply BMC, run the following comamnds, where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, or `Auction`):
+To apply BMC, run the following comamnds, where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, `TimedMgr`, or `Auction`):
 ```
 solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} --concrete --c-model --output-dir=bmc
 cd bmc
 mkdir build
 cd build
 cmake build ..
-make verify_concrete # Use 'make bmc' instead of 'make verify_concrete' to bound analysis to 5 transactions.
+time make verify_concrete # Use 'make bmc' instead of 'make verify_concrete' to bound analysis to 5 transactions.
 ```
 
 ## Instructions for Fuzzing
 
-To apply greybox fuzzing, run the following comamnds where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, or `Auction):
+To apply greybox fuzzing, run the following comamnds where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, `TimedMgr`, or `Auction`):
 ```
 solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} --concrete --c-model --output-dir=fuz
 cd fuz
 mkdir build
 cd build
 CC=clang-10 CXX=clang++-10 cmake -DFUZZ_RUNS=-1 ..
-make fuzz
+time make fuzz
 ```
 
 ## Instructions for Symbolic Execution
 
-To apply symbolic execution, run the following commands, run the following comamnds where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, or `Auction).
+To apply symbolic execution, run the following commands, run the following comamnds where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, `TimedMgr`, or `Auction`):
 ```
 solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} --concrete --c-model --output-dir=symbex
 cd symbex
 mkdir build
 cd build
 CC=clang-10 CXX=clang++-10 cmake -DKLEE_MAX_TIME=900s ..
-make symbex
+time make symbex
 ```
 
 ## Instructions for PCMC without Synthesis
 
-To do: add instructions.
+For property `R5` and `A2`, all transient users *must* be concrete, otherwise, they may be abstracted.
+For `R5` and `A2`, run:
+```
+solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-type=rolebased --c-model --output-dir=pcmc
+```
+Otherwise, run:
+```
+solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --c-model --output-dir=pcmc
+```
+Regardless of the property, continue by running:
+```
+cd pcmc
+mkdir build
+cd build
+cmake ..
+time make verify
+```
+
+Note that to verify `A1`, an interference invariant must be provided manually.
+This can be done by replacing `eval/pcmc/cmodel.c` with `/home/usea/verify/res/cmodel.c`.
 
 ## Instructions for PCMC with Synthesis
 
-To do: add instructions.
+For property `R5` and `A2`, all transient users *must* be concrete, otherwise, they may be abstracted.
+For `R5` and `A2`, run:
+```
+solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-stateful=on --invar-type=rolebased --invar-infer=on --c-model --output-dir=synth
+```
+Otherwise, run:
+```
+solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-stateful=on --invar-infer=on --c-model --output-dir=synth
+```
+Regardless of the property, continue by running:
+```
+cd synth
+mkdir build
+cd build
+cmake ..
+time make verify
+```
 
 # Publication(s)
 
