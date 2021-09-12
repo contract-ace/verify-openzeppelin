@@ -1,5 +1,9 @@
 FROM seahorn/seahorn-llvm10:nightly
 
+# Installs time command.
+USER root
+RUN apt-get install -y time
+
 # nvm defaults for Scribble install.
 ENV NVM_DIR /home/usea/.nvm
 ENV NODE_VERSION 10.24.1
@@ -27,7 +31,7 @@ RUN mkdir -p /home/usea/smartace && \
     mkdir -p /home/usea/klee && \
     tar xf /tmp/smartace-*.tar.gz -C smartace --strip-components=1 && \
     tar xf /tmp/klee.tar.gz -C klee --strip-components=3 && \
-    git clone https://github.com/contract-ace/verify-openzeppelin.git /home/usea/contracts
+    git clone https://github.com/contract-ace/verify-openzeppelin.git /home/usea/verify
 
 # Cleanup.
 USER root
