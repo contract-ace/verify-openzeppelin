@@ -68,6 +68,7 @@ Otherwise, run:
 ```
 time make verify_concrete
 ```
+Note that the expected output should contain `SAT` to indicate that a bug has been detected.
 
 ## Instructions for Fuzzing
 
@@ -115,6 +116,7 @@ cd build
 cmake ..
 time make verify
 ```
+Note that the expected output should contain `UNSAT` to indicate that a bug has not been detected.
 
 Note that to verify `A1`, an interference invariant must be provided manually.
 This can be done by replacing `eval/pcmc/cmodel.c` with `/home/usea/verify/res/cmodel.c`.
@@ -140,6 +142,7 @@ cd build
 cmake ..
 time make verify
 ```
+Note that the expected output should contain `UNSAT` to indicate that a bug has not been detected.
 
 # Publication(s)
 
