@@ -23,42 +23,58 @@ To evaluate the effectiveness of SmartACE, all smart contracts are instantiated 
 
 # Instructions to Reproduce
 
-The case study environment is available as a Docker container.
-For details to build the Docker environment, see `./docker/README.md`.
+Each case study requires an installation of `clang-10`, SeaHorn, Klee, SmartACE, Scribble, and `python3`.
+A preconfigured environment is available as a Docker image.
+If this is your first time using Docker, start by installing the client for [Ubuntu](https://docs.docker.com/installation/ubuntulinux/), [OS X](https://docs.docker.com/installation/mac/), or [Windows](https://docs.docker.com/installation/windows/).
+Alternatively, the Docker image can be built manually by following the directions in `docker/`.
 To enter the Docker environment, run `docker run -it verify-openzeppelin /bin/bash`.
 
-The first step in each evaluation is to generate a contract with assertions using `Scribble`.
-Note that the script `./scripts/postprocessing_scribble.py` to automate the integration between `SmartACE` and `Scribble`.
-To generate the contract with assertions, run the following commands where `${STUDY}` is the case study directory and `${SOLFILE}` is the annotated contract:
+The commands for each experiment can be found in `experiments/README.md`.
+The rest of this section describes in detail how to perform each experiment.
+
+The first step in each experiment is to convert contract annotations into assertions using `Scribble`.
+Note that the script `./scripts/postprocessing_scribble.py` is used to automate the integration between `SmartACE` and `Scribble`.
+To generate the contract with assertions, run the following commands where `${DIR}` is one of (`auction`, `escrow`, `ownable`) and `${FILE}` is the annotated contract:
 ```
-cd verify/contracts/${STUDY}
+cd /home/usea/verify/contracts/${DIR}
 mkdir -p eval
-scribble ${SOLFILE} --output-mode flat --output eval/scribble.sol
+scribble ${FILE} --output-mode flat --output eval/scribble.sol
 cd eval
 python /home/usea/verify/scripts/postprocess_scribble.py scribble.sol scribble.clean.sol
 ```
 
-The second step applies `SmartACE` to verify the contract.
+The second step applies SmartACE to verify the contract.
 This step depends on the mode of analysis being applied.
 Instructions are given for each analyzer.
 
 ## Instructions for BMC
 
-To apply BMC, run the following comamnds, where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, `TimedMgr`, or `Auction`):
+To apply BMC, first convert the annotated contract into an LLVM-based model, and configure the project.
+To do this, run the following commands where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, `TimedMgr`, or `Auction`):
 ```
-solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} --concrete --c-model --output-dir=bmc
+solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} \
+                        --concrete --c-model --output-dir=bmc
 cd bmc
 mkdir build
 cd build
 cmake build ..
-time make verify_concrete # Use 'make bmc' instead of 'make verify_concrete' to bound analysis to 5 transactions.
+```
+
+To apply BMC with a bound of 5 iterations, run the following command:
+```
+time make bmc
+```
+Otherwise, run:
+```
+time make verify_concrete
 ```
 
 ## Instructions for Fuzzing
 
 To apply greybox fuzzing, run the following comamnds where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, `TimedMgr`, or `Auction`):
 ```
-solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} --concrete --c-model --output-dir=fuz
+solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} \
+                        --concrete --c-model --output-dir=fuz
 cd fuz
 mkdir build
 cd build
@@ -70,7 +86,8 @@ time make fuzz
 
 To apply symbolic execution, run the following commands, run the following comamnds where `${NUM_USERS}` is the number of users and `${CONTRACT}` is the name of the contract (i.e., `Ownable`, `RefundEscrow`, `TimedMgr`, or `Auction`):
 ```
-solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} --concrete --c-model --output-dir=symbex
+solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} \
+                        --concrete --c-model --output-dir=symbex
 cd symbex
 mkdir build
 cd build
@@ -83,7 +100,8 @@ time make symbex
 For property `R5` and `A2`, all transient users *must* be concrete, otherwise, they may be abstracted.
 For `R5` and `A2`, run:
 ```
-solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-type=rolebased --c-model --output-dir=pcmc
+solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-type=rolebased \
+                        --c-model --output-dir=pcmc
 ```
 Otherwise, run:
 ```
@@ -106,11 +124,13 @@ This can be done by replacing `eval/pcmc/cmodel.c` with `/home/usea/verify/res/c
 For property `R5` and `A2`, all transient users *must* be concrete, otherwise, they may be abstracted.
 For `R5` and `A2`, run:
 ```
-solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-stateful=on --invar-type=rolebased --invar-infer=on --c-model --output-dir=synth
+solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-stateful=on \
+                        --invar-type=rolebased --invar-infer=on --c-model --output-dir=synth
 ```
 Otherwise, run:
 ```
-solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-stateful=on --invar-infer=on --c-model --output-dir=synth
+solc scribble.clean.sol --bundle=${CONTRACT} --invar-rule=checked --invar-stateful=on  \
+                        --invar-infer=on --c-model --output-dir=synth
 ```
 Regardless of the property, continue by running:
 ```
