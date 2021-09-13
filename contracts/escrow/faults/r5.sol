@@ -70,6 +70,18 @@ contract Escrow is Ownable {
 
         emit Withdrawn(payee, payment);
     }
+
+    // (*) Fault.
+    function bad(address payable payee) public virtual onlyOwner {
+        uint256 payment = _deposits[payee];
+
+        _deposits[payee] = 0;
+
+        payee.transfer(payment);
+
+        emit Withdrawn(payee, payment);
+    }
+
 }
 
 contract ConditionalEscrow is Escrow {
