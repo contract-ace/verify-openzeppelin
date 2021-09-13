@@ -32,6 +32,9 @@ else
     echo "Property must be one of: o1, o2, o3, r1, r2, r3, r4, r5, a1, a2."
     exit 1
 fi
+if [[ "$2" =~ ^(bmc5|bmc500|fuz5|fuz500|sym5|sym500) ]]; then
+    ROOT="${ROOT}/faults"
+fi
 
 # Generates contract with assertions.
 SOL_FN="$1.sol"
@@ -124,4 +127,7 @@ elif [[ "$2" == "sym500" ]]; then
     cd build
     CC=clang-10 CXX=clang++-10 cmake -DKLEE_MAX_TIME=900s ..
     time make symbex
+else
+    echo "Experiment must be one of: auto, man, bmc5, bmc500, fuz5, fuz500, bmc5, bmc500"
+    exit 1
 fi
