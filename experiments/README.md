@@ -166,7 +166,8 @@ rm -f eval_a1/scribble.sol eval_a1/scribble.clean.sol
 scribble a1.sol --output-mode flat --output eval_a1/scribble.sol
 cd eval_a1
 python /home/usea/verify/scripts/postprocess_scribble.py scribble.sol scribble.clean.sol
-solc scribble.clean.sol --bundle=Auction --invar-rule=checked --c-model --output-dir=pcmc
+solc scribble.clean.sol --bundle=Auction --invar-rule=checked --c-model --invar-type=rolebased \
+                        --output-dir=pcmc
 cd pcmc
 mkdir build
 cd build
@@ -350,7 +351,7 @@ scribble a1.sol --output-mode flat --output eval_a1/scribble.sol
 cd eval_a1
 python /home/usea/verify/scripts/postprocess_scribble.py scribble.sol scribble.clean.sol
 solc scribble.clean.sol --bundle=Auction --invar-rule=checked --invar-stateful=on \
-                        --invar-infer=on --c-model --output-dir=synth
+                        --invar-type=rolebased --invar-infer=on --c-model --output-dir=synth
 cd synth
 mkdir build
 cd build

@@ -57,7 +57,7 @@ solc scribble.clean.sol --aux-users=${NUM_USERS} --bundle=${CONTRACT} \
 cd bmc
 mkdir build
 cd build
-cmake build ..
+cmake ..
 ```
 
 To apply BMC with a bound of 5 iterations, run the following command:
