@@ -12,7 +12,7 @@ As stated in the paper, all experiments were performed on an `Intel(R) Core i7(R
 # Structure of Artifact
 
 The artifact is built upon the VMCAI 2022 Virtual Machine and uses Docker to encapsulate experimental setup.
-The Docker image used in this evaluation is `verify-openzeppelin` and is built from: https://github.com/contract-ace/verify-openzeppelin/.
+The Docker image used in this evaluation is `seahorn/verify-openzeppelin:anise` and is built from: https://github.com/contract-ace/verify-openzeppelin/.
 For more details on Docker, visit: https://www.docker.com/.
 
 The `verify-openzeppelin` image includes installations of SmartACE (`/home/usea/smartace`), Klee (`/home/usea/klee/`), Scribble (`/home/usea/.nvm/versions/node/v10.24.1/bin/`), and SeaHorn (`/home/usea/seahorn/`).
@@ -24,7 +24,7 @@ An explanation of the script can be found in `/home/usea/verify/README.md`.
 # Evaluating the Artifact
 
 To evaluate the artifact, first enter the Docker container.
-This is done by executing `docker run -it verify-openzeppelin /bin/bash`.
+This is done by executing `sudo docker run -it --rm seahorn/verify-openzeppelin:anise /bin/bash`.
 This will open a new terminal within the Docker container through which each experiment is performed.
 
 The `/home/usea/verify/scripts/evaluate.sh` is used to run each experiment.
@@ -40,12 +40,20 @@ Possible values for `${EXPR}` include:
 - `sym5`: Symbolic execution with 5 users;
 - `sym500`: Symbolic execution with 500 users.
 
+Since the artifact is released as a Docker container, it is possible to reproduce the results without the VM using Docker directly.
+Evaluating the artifact outside of a VM will yield more realistic timing results.
+For this, pull our container from Dockerhub, and then proceed to the next section:
+Note that the container is very large (4.87GB).
+```
+docker pull seahorn/verify-openzeppelin:anise
+```
+
 ## Evaluation for Testing Phase
 
 A tester will want to ensure that the Docker container workers, and that each choice of property or experiment is supported.
 Certain combinations of property and experiment are very slow to validate (see Table 2 in main paper).
 We suggest the following sequence of commands as a starting point for testers:
-- `docker run -it verify-openzeppelin /bin/bash`
+- `sudo docker run -it --rm seahorn/verify-openzeppelin:anise /bin/bash`
 - `/home/usea/verify/scripts/evaluate.sh o3 man`
 - `/home/usea/verify/scripts/evaluate.sh o3 auto`
 - `/home/usea/verify/scripts/evaluate.sh o3 bmc5`

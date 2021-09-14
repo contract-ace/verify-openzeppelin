@@ -27,7 +27,7 @@ Each case study requires an installation of `clang-10`, SeaHorn, Klee, SmartACE,
 A preconfigured environment is available as a Docker image.
 If this is your first time using Docker, start by installing the client for [Ubuntu](https://docs.docker.com/installation/ubuntulinux/), [OS X](https://docs.docker.com/installation/mac/), or [Windows](https://docs.docker.com/installation/windows/).
 Alternatively, the Docker image can be built manually by following the directions in `docker/`.
-To enter the Docker environment, run `docker run -it verify-openzeppelin /bin/bash`.
+To enter the Docker environment, run `docker run -it --rm verify-openzeppelin /bin/bash`.
 
 The commands for each experiment can be found in `experiments/README.md`.
 The rest of this section describes in detail how to perform each experiment.
