@@ -1,4 +1,4 @@
-FROM seahorn/seahorn-llvm10:nightly
+FROM seahorn/smartace:baijiu
 
 # Installs time command.
 USER root
@@ -22,23 +22,7 @@ ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN npm install --global eth-scribble
 
-# Unpacks smartace and klee.
+# Pulls contracts from github.
 USER usea
-COPY smartace-*.tar.gz /tmp
-COPY klee.tar.gz /tmp
-WORKDIR /home/usea
-RUN mkdir -p /home/usea/smartace && \
-    mkdir -p /home/usea/klee && \
-    tar xf /tmp/smartace-*.tar.gz -C smartace --strip-components=1 && \
-    tar xf /tmp/klee.tar.gz -C klee --strip-components=3 && \
-    git clone https://github.com/contract-ace/verify-openzeppelin.git /home/usea/verify
-
-# Cleanup.
-USER root
-RUN rm -rf /tmp/smartace-*.tar.gz && \
-    rm -rf /tmp/klee.tar.gz
-
-# Evaluation environment.
-USER usea
-ENV PATH $PATH:/home/usea/klee/bin:/home/usea/smartace/bin
+RUN git clone https://github.com/contract-ace/verify-openzeppelin.git /home/usea/verify
 
