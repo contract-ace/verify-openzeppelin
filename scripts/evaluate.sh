@@ -118,7 +118,6 @@ elif [[ "$2" == "sym5" ]]; then
     cd build
     CC=clang-10 CXX=clang++-10 cmake -DKLEE_MAX_TIME=900s ..
     time make symbex
-    time make fuzz
 elif [[ "$2" == "sym500" ]]; then
     # Run Symbolic Execution (500).
     solc scribble.clean.sol --aux-users=500 --bundle=${CTRT} --concrete --c-model --output-dir=symbex
