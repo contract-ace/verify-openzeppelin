@@ -8,6 +8,9 @@ They are as follows:
 2. All faults can be detected using each of BMC, fuzzing, and symbolic execution.
 3. Each reported time reflects the real verification/refutation time.
 As stated in the paper, all experiments were performed on an `Intel(R) Core i7(R) CPU @ 1.8GHz 8-core` machine with 16GB of RAM running `Ubuntu 20.04`.
+Contracts `Ownable` and `RefundEscrow` are from `OpenZeppelin Contracts v4.3.1` and are available without annotations at: https://github.com/OpenZeppelin/openzeppelin-contracts.
+
+The submitted paper is available here: https://arxiv.org/abs/2107.08583.
 
 # Structure of Artifact
 
