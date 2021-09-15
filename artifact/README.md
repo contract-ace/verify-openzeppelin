@@ -57,8 +57,8 @@ docker pull seahorn/verify-openzeppelin:anise
 
 ## Evaluation for Testing Phase
 
-A tester will want to ensure that the Docker container workers, and that each choice of property or experiment is supported.
-Certain combinations of property and experiment are very slow to validate (see Table 2 in main paper).
+A tester will want to ensure that the Docker container works, and that each choice of property or experiment is supported.
+Certain combinations of property and experiment are very slow to validate (see Table 2 in the submitted paper).
 We suggest the following sequence of commands as a starting point for testers:
 - `sudo docker run -it --rm seahorn/verify-openzeppelin:anise /bin/bash`
 - `/home/usea/verify/scripts/evaluate.sh o3 man`
@@ -84,21 +84,21 @@ For details on how to interpret each output, see the next section.
 
 ## Evaluation for Assessment Phase
 
-This section describes how an accessor should interpret the output for each command.
+This section describes how one should interpret the output for each command.
 
-If verification (`man` or `auto`) is successful, then the accessor should identify a line `unsat` in the output.
+If verification (`man` or `auto`) is successful, then the line `unsat` should be included in the output.
 The line `unsat` indicates that there does not exist a counterexample to the property.
 The final 3 lines will provide timing data for verification.
 
-If BMC (`bmc5` or `bmc500`) is successful, then the accessor should identify a line `sat` in the output.
+If BMC (`bmc5` or `bmc500`) is successful, then the line `sat` should be included in the output.
 The line `sat` indicates that a counterexample was discovered.
 The final 3 lines will provide timing data for verification.
 
-If greybox fuzzing is successful, then the accessor should identify a line `SUMMARY: libFuzzer: deadly signal`.
+If greybox fuzzing is successful, then the line `SUMMARY: libFuzzer: deadly signal` should be included in the output.
 This indicates that an assertion was violated.
 The final 3 lines will provide timing data for verification.
 
-If symbolic execution is successful, then the accessor should identify a line `KLEE: ERROR: libverify/verify_klee.c:48: ASSERTION FAIL: _cond`.
+If symbolic execution is successful, then the line `KLEE: ERROR: libverify/verify_klee.c:48: ASSERTION FAIL: _cond` should be included in the output.
 This indicates that an assertion was violated.
 The final 3 lines will provide timing data for verification.
 Note that for failed evaluations, the resource limit was reached within 2 hours.
