@@ -13,6 +13,7 @@ As stated in the paper, all experiments were performed on an `Intel(R) Core i7(R
 
 The artifact is built upon the VMCAI 2022 Virtual Machine and uses Docker to encapsulate experimental setup.
 The Docker image used in this evaluation is `seahorn/verify-openzeppelin:anise` and is built from: https://github.com/contract-ace/verify-openzeppelin/.
+The container is available at: https://hub.docker.com/r/seahorn/verify-openzeppelin/.
 For more details on Docker, visit: https://www.docker.com/.
 
 The `verify-openzeppelin` image includes installations of SmartACE (`/home/usea/smartace`), Klee (`/home/usea/klee/`), Scribble (`/home/usea/.nvm/versions/node/v10.24.1/bin/`), and SeaHorn (`/home/usea/seahorn/`).
