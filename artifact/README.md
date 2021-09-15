@@ -10,7 +10,7 @@ They are as follows:
 As stated in the paper, all experiments were performed on an `Intel(R) Core i7(R) CPU @ 1.8GHz 8-core` machine with 16GB of RAM running `Ubuntu 20.04`.
 Contracts `Ownable` and `RefundEscrow` are from `OpenZeppelin Contracts v4.3.1` and are available without annotations at: https://github.com/OpenZeppelin/openzeppelin-contracts.
 
-The submitted paper is available here: https://arxiv.org/abs/2107.08583.
+The submitted paper is available at: https://github.com/contract-ace/verify-openzeppelin/blob/master/artifact/paper.pdf.
 
 # Structure of Artifact
 
