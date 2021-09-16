@@ -42,11 +42,13 @@ EVAL_DIR="${ROOT}/eval_$1"
 cd ${ROOT}
 rm -rf ${EVAL_DIR}
 mkdir ${EVAL_DIR}
+echo "Running scribble... this may take a few minutes..."
 scribble ${SOL_FN} --output-mode flat --output ${EVAL_DIR}/scribble.sol
 cd ${EVAL_DIR}
 python /home/usea/verify/scripts/postprocess_scribble.py scribble.sol scribble.clean.sol
 
 # Determines experiment.
+echo "Analyzing contract..."
 if [[ "$2" == "man" ]]; then
     # Run Manual Verification.
     if [[ "$1" =~ ^(r5|a2)$ ]]; then

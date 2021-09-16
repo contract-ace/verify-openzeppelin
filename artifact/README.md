@@ -32,7 +32,7 @@ An explanation of the script can be found in `/home/usea/verify/README.md`.
 # Evaluating the Artifact
 
 To evaluate the artifact, first enter the Docker container.
-This is done by executing `sudo docker run -it --rm seahorn/verify-openzeppelin:anise /bin/bash`.
+This is done by executing `docker run -it --rm seahorn/verify-openzeppelin:anise /bin/bash`.
 This will open a new terminal within the Docker container through which each experiment is performed.
 
 The script at `/home/usea/verify/scripts/evaluate.sh` is used to run each experiment.
@@ -58,12 +58,17 @@ Note that the container is very large (4.87GB).
 docker pull seahorn/verify-openzeppelin:anise
 ```
 
+*PLEASE NOTE*:
+In rare cases, SeaHorn may enter a deadlock after executing `clang-10 -c -emit-llvm ...`.
+This bug causes `man`, `auto`, `bmc5`, and `bmc500` to become unresponsive.
+If `evaluate.sh` hangs for more than 5 seconds after executing `clang-10 -c -emit-llvm ...`, kill the command and try again.
+
 ## Evaluation for Testing Phase
 
 A tester will want to ensure that the Docker container works, and that each choice of property or experiment is supported.
 Certain combinations of property and experiment are very slow to validate (see Table 2 in the submitted paper).
 We suggest the following sequence of commands as a starting point for testers:
-- `sudo docker run -it --rm seahorn/verify-openzeppelin:anise /bin/bash`
+- `docker run -it --rm seahorn/verify-openzeppelin:anise /bin/bash`
 - `/home/usea/verify/scripts/evaluate.sh o3 man`
 - `/home/usea/verify/scripts/evaluate.sh o3 auto`
 - `/home/usea/verify/scripts/evaluate.sh o3 bmc5`
@@ -105,3 +110,4 @@ If symbolic execution is successful, then the line `KLEE: ERROR: libverify/verif
 This indicates that an assertion was violated.
 The final 3 lines will provide timing data for verification.
 Note that for failed evaluations, the resource limit was reached within 2 hours.
+
