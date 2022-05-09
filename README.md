@@ -146,5 +146,6 @@ Note that the expected output should contain `UNSAT` to indicate that a bug has 
 
 # Publication(s)
 
-Under review.
+- [Read the paper.](https://mariachris.github.io/Pubs/VMCAI-2022.pdf)
+- [Watch the talk.](https://www.youtube.com/watch?v=MSlR7OQ-_C4)
 
