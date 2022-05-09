@@ -20,7 +20,7 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.30.0/install.sh | b
 USER usea
 ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-RUN npm install --global eth-scribble
+RUN npm install --global eth-scribble@0.5.3
 
 # Pulls contracts from github.
 USER usea
